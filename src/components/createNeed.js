@@ -22,6 +22,11 @@ const ServiceOptionIconWrapper = styled.div`
 `
 
 export default class CreateNeed extends Component {
+  state = {
+    needType: null,
+    howSoon: null,
+  }
+
   render() {
     const serviceOptions = [
       {
