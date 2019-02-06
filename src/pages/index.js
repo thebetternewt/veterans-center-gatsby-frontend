@@ -25,10 +25,8 @@ const IndexPage = () => (
         justifyContent: 'center',
       }}
     >
-      <Row>
-        <Col span={12} offset={6}>
-          <HomeSignup />
-        </Col>
+      <Row justify="space-around">
+        <HomeSignup />
       </Row>
     </div>
 

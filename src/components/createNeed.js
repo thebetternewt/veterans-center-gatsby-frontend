@@ -7,9 +7,10 @@ const ServiceOption = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* background-color: yellow; */
   cursor: pointer;
   transition: all 200ms ease-in;
+  text-align: center;
+  margin: 1rem 0;
 
   &:hover {
     transform: scale(1.1);
@@ -19,6 +20,7 @@ const ServiceOption = styled.div`
 
 const ServiceOptionIconWrapper = styled.div`
   margin: 10px;
+  
 `
 
 export default class CreateNeed extends Component {
@@ -48,10 +50,10 @@ export default class CreateNeed extends Component {
     ]
 
     const serviceOptionItems = serviceOptions.map(({ text, iconComponent }) => (
-      <Col span={6}>
+      <Col xs={12} md={6} >
         <ServiceOption>
-          <ServiceOptionIconWrapper>
-            {iconComponent({ size: '3rem' })}
+          <ServiceOptionIconWrapper >
+            {iconComponent({ size: '2.5rem' })}
           </ServiceOptionIconWrapper>
           <h4>{text}</h4>
         </ServiceOption>
@@ -63,7 +65,7 @@ export default class CreateNeed extends Component {
     return (
       <div>
         <h3>What kind of need to you have?</h3>
-        <Row justify="center" type="flex" gutter={5} style={{ margin: '2rem' }}>
+        <Row justify="center" align="middle" type="flex" gutter={5} style={{ margin: '2rem auto' }} >
           {serviceOptionItems}
         </Row>
         <Button size="large" type="primary" onClick={() => cancel()}>

@@ -34,13 +34,13 @@ export default class HomeSignup extends Component {
 
     let content = (
       <>
-        <RegisterOption span={6} offset={6} align="center">
+        <RegisterOption xs={{ span: 24, offset: 0 }} sm={{ span: 12 }} align="center">
           <p>Looking for services?</p>
           <Button type="primary" size="large" onClick={this.handleStartNeed}>
             Post a need
           </Button>
         </RegisterOption>
-        <RegisterOption span={6} align="center">
+        <RegisterOption xs={{ span: 24, offset: 0 }} sm={12} align="center">
           <p>Looking to help out?</p>
           <Button
             type="primary"
@@ -69,6 +69,8 @@ export default class HomeSignup extends Component {
           borderRadius: 10,
           padding: '2rem',
           backgroundColor: '#fff',
+          maxWidth: 900,
+          margin: 'auto'
         }}
       >
         {content}
