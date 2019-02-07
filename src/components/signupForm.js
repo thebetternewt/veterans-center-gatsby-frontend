@@ -11,8 +11,18 @@ import {
   Select,
 } from 'antd'
 
+import { Mutation } from 'react-apollo'
+import { SIGNUP } from '../apollo/mutations'
+import graphQlErrors from './graphqlErrors'
+
 function hasErrors(fieldsError) {
-  return Object.keys(fieldsError).some(field => fieldsError[field])
+  const errors = {
+    ...fieldsError,
+    ...fieldsError.address,
+    address: null,
+  }
+  // console.log(errors)
+  return Object.keys(errors).some(field => errors[field])
 }
 
 const statesWithAbbreviations = new UsaStates().format({
@@ -30,10 +40,6 @@ class SignupForm extends Component {
     this.setState({ confirmDirty: this.state.confirmDirty || !!value })
   }
 
-  handleSelectChange = value => {
-    console.log(`selected ${value}`)
-  }
-
   compareToFirstPassword = (rule, value, callback) => {
     const { form } = this.props
     if (value && value !== form.getFieldValue('password')) {
@@ -43,20 +49,36 @@ class SignupForm extends Component {
     }
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e, signup) => {
     e.preventDefault()
-    const { validateFields, getFieldsValue } = this.props.form
-    console.log(getFieldsValue())
-    // TODO: validateFields before submit
+    const { validateFields } = this.props.form
+
+    validateFields(async (errors, values) => {
+      // console.log('errors:', errors)
+      // console.log('values:', values)
+      if (!errors) {
+        const flattenedValues = {
+          ...values,
+          ...values.address,
+        }
+        try {
+          await signup({ variables: flattenedValues })
+        } catch (err) {
+          console.log(err)
+        }
+        window.scrollTo(0, 0)
+      }
+    })
   }
   render() {
-    console.log(this.props)
+    // console.log(this.props)
     const {
       getFieldDecorator,
       getFieldsError,
       getFieldError,
       isFieldTouched,
       getFieldsValue,
+      validateFields,
     } = this.props.form
     const firstNameError =
       isFieldTouched('firstName') && getFieldError('firstName')
@@ -65,8 +87,6 @@ class SignupForm extends Component {
     const emailError = isFieldTouched('email') && getFieldError('email')
     const passwordError =
       isFieldTouched('password') && getFieldError('password')
-
-    console.log(getFieldsValue())
 
     const { Option } = Select
 
@@ -101,159 +121,181 @@ class SignupForm extends Component {
     ))
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Item
-          {...formItemLayout}
-          validateStatus={firstNameError ? 'error' : ''}
-          help={firstNameError || ''}
-          label="First Name"
-        >
-          {getFieldDecorator('firstName', {
-            rules: [
-              { required: true, message: 'Please enter your first name.' },
-            ],
-          })(<Input />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="Middle Name">
-          {getFieldDecorator('middleName')(<Input />)}
-        </Form.Item>
-
-        <Form.Item
-          {...formItemLayout}
-          validateStatus={lastNameError ? 'error' : ''}
-          help={lastNameError || ''}
-          label="Last Name"
-        >
-          {getFieldDecorator('lastName', {
-            rules: [
-              { required: true, message: 'Please enter your last name.' },
-            ],
-          })(<Input />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="Age">
-          {getFieldDecorator('age', {
-            rules: [
-              {
-                type: 'integer',
-                required: true,
-                message: 'Please enter a whole number.',
-              },
-            ],
-          })(<InputNumber min={1} step="1" type="number" />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="Phone Number">
-          {getFieldDecorator('phone', {
-            rules: [
-              { required: true, message: 'Please enter your phone number.' },
-              // TODO: validate phone number input
-              // TODO: input mask
-            ],
-          })(<Input type="tel" />)}
-        </Form.Item>
-
-        <Form.Item
-          {...formItemLayout}
-          validateStatus={emailError ? 'error' : ''}
-          help={emailError || ''}
-          label="Email"
-        >
-          {getFieldDecorator('email', {
-            rules: [
-              {
-                type: 'email',
-                required: true,
-                message: 'Please enter a valid email address.',
-              },
-            ],
-          })(<Input />)}
-        </Form.Item>
-
-        <Form.Item
-          {...formItemLayout}
-          validateStatus={passwordError ? 'error' : ''}
-          help={passwordError || ''}
-          label="Password"
-        >
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please enter a password.' }],
-          })(
-            <Input.Password
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="Password"
-            />
-          )}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="Confirm Password">
-          {getFieldDecorator('confirm', {
-            rules: [
-              {
-                required: true,
-                message: 'Please confirm your password.',
-              },
-              {
-                validator: this.compareToFirstPassword,
-              },
-            ],
-          })(<Input.Password onBlur={this.handleConfirmBlur} />)}
-        </Form.Item>
-
-        <Form.Item {...tailFormItemLayout}>
-          <Divider span>Address</Divider>
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="Street 1">
-          {getFieldDecorator('address.street1', {
-            rules: [{ required: true, message: 'Address street 1 required.' }],
-          })(<Input />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="Street 2">
-          {getFieldDecorator('address.street2')(<Input />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="City">
-          {getFieldDecorator('address.city', {
-            rules: [{ required: true, message: 'City is required.' }],
-          })(<Input />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="State">
-          {getFieldDecorator('address.state', {
-            rules: [{ required: true, message: 'State is required.' }],
-          })(
-            <Select
-              showSearch
-              // style={{ width: 300 }}
-              placeholder="Select your state"
-              optionFilterProp="children"
-              onChange={this.handleSelectChange}
-              // onFocus={handleFocus}
-              // onBlur={handleBlur}
-              filterOption={(input, option) =>
-                option.props.children
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
+      <Mutation mutation={SIGNUP}>
+        {(signup, { loading, error }) => (
+          <Form onSubmit={e => this.handleSubmit(e, signup)}>
+            <Form.Item {...tailFormItemLayout}>
+              {error && graphQlErrors(error)}
+            </Form.Item>
+            <Form.Item
+              {...formItemLayout}
+              validateStatus={firstNameError ? 'error' : ''}
+              help={firstNameError || ''}
+              label="First Name"
             >
-              {stateOptions}
-            </Select>
-          )}
-        </Form.Item>
+              {getFieldDecorator('firstName', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please enter your first name.',
+                  },
+                ],
+              })(<Input />)}
+            </Form.Item>
 
-        <Form.Item {...tailFormItemLayout}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={hasErrors(getFieldsError())}
-          >
-            Sign Up
-          </Button>
-        </Form.Item>
-      </Form>
+            <Form.Item {...formItemLayout} label="Middle Name">
+              {getFieldDecorator('middleName')(<Input />)}
+            </Form.Item>
+
+            <Form.Item
+              {...formItemLayout}
+              validateStatus={lastNameError ? 'error' : ''}
+              help={lastNameError || ''}
+              label="Last Name"
+            >
+              {getFieldDecorator('lastName', {
+                rules: [
+                  { required: true, message: 'Please enter your last name.' },
+                ],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item {...formItemLayout} label="Age">
+              {getFieldDecorator('age', {
+                rules: [
+                  {
+                    type: 'integer',
+                    required: true,
+                    message: 'Please enter a whole number.',
+                  },
+                ],
+              })(<InputNumber min={1} step="1" type="number" />)}
+            </Form.Item>
+
+            <Form.Item {...formItemLayout} label="Phone Number">
+              {getFieldDecorator('phone', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please enter your phone number.',
+                  },
+                  // TODO: validate phone number input
+                  // TODO: input mask
+                ],
+              })(<Input type="tel" />)}
+            </Form.Item>
+
+            <Form.Item
+              {...formItemLayout}
+              validateStatus={emailError ? 'error' : ''}
+              help={emailError || ''}
+              label="Email"
+            >
+              {getFieldDecorator('email', {
+                rules: [
+                  {
+                    type: 'email',
+                    required: true,
+                    message: 'Please enter a valid email address.',
+                  },
+                ],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item
+              {...formItemLayout}
+              validateStatus={passwordError ? 'error' : ''}
+              help={passwordError || ''}
+              label="Password"
+            >
+              {getFieldDecorator('password', {
+                rules: [
+                  { required: true, message: 'Please enter a password.' },
+                ],
+              })(
+                <Input.Password
+                  prefix={
+                    <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+                  }
+                  placeholder="Password"
+                />
+              )}
+            </Form.Item>
+
+            <Form.Item {...formItemLayout} label="Confirm Password">
+              {getFieldDecorator('confirm', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please confirm your password.',
+                  },
+                  {
+                    validator: this.compareToFirstPassword,
+                  },
+                ],
+              })(<Input.Password onBlur={this.handleConfirmBlur} />)}
+            </Form.Item>
+
+            <Form.Item {...tailFormItemLayout}>
+              <Divider orientation="left">Address</Divider>
+            </Form.Item>
+
+            <Form.Item {...formItemLayout} label="Street 1">
+              {getFieldDecorator('address.street1', {
+                rules: [
+                  { required: true, message: 'Address street 1 required.' },
+                ],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item {...formItemLayout} label="Street 2">
+              {getFieldDecorator('address.street2')(<Input />)}
+            </Form.Item>
+
+            <Form.Item {...formItemLayout} label="City">
+              {getFieldDecorator('address.city', {
+                rules: [{ required: true, message: 'City is required.' }],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item {...formItemLayout} label="State">
+              {getFieldDecorator('address.state', {
+                rules: [{ required: true, message: 'State is required.' }],
+              })(
+                <Select
+                  showSearch
+                  placeholder="Select your state"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.props.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {stateOptions}
+                </Select>
+              )}
+            </Form.Item>
+
+            <Form.Item {...formItemLayout} label="Zipcode">
+              {getFieldDecorator('address.zipcode', {
+                rules: [{ required: true, message: 'Zipcode is required.' }],
+              })(<Input />)}
+            </Form.Item>
+
+            <Form.Item {...tailFormItemLayout}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={hasErrors(getFieldsError())}
+                loading={loading}
+              >
+                Sign Up
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
+      </Mutation>
     )
   }
 }

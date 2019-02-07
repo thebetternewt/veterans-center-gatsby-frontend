@@ -1,6 +1,7 @@
+import React from 'react'
 import { Link } from 'gatsby'
 import PropTypes from 'prop-types'
-import React from 'react'
+import { Button } from 'antd'
 
 const Header = ({ siteTitle }) => (
   <div
@@ -13,6 +14,7 @@ const Header = ({ siteTitle }) => (
         margin: `0 auto`,
         maxWidth: 960,
         padding: `1.45rem 1.0875rem`,
+        color: '#fff',
       }}
     >
       <h1 style={{ margin: 0 }}>
@@ -26,6 +28,12 @@ const Header = ({ siteTitle }) => (
           {siteTitle}
         </Link>
       </h1>
+      <Link to="/login">
+        <Button>Login</Button>
+      </Link>
+      <Link to="/signup">
+        <Button>Sign Up</Button>
+      </Link>
     </div>
   </div>
 )

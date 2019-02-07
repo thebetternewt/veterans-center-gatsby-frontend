@@ -1,16 +1,14 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Layout from '../components/layout'
 import { Row, Col } from 'antd'
+import LoginForm from '../components/loginForm'
+import { getAuthenticatedUser } from '../apollo/client'
 
 import family from '../images/family.jpeg'
+import { navigate } from 'gatsby'
 
-import Layout from '../components/layout'
-import SEO from '../components/seo'
-import HomeSignup from '../components/homeSignup'
-
-const IndexPage = () => (
+const LoginPage = () => (
   <Layout>
-    <SEO title="Home" keywords={[`veterans`, `military`, `volunteer`]} />
     <div
       style={{
         width: '100vw',
@@ -25,12 +23,20 @@ const IndexPage = () => (
       }}
     >
       <Row justify="space-around">
-        <HomeSignup />
+        <Col
+          xs={24}
+          md={{ span: 12, offset: 6 }}
+          style={{
+            backgroundColor: '#fff',
+            borderRadius: 10,
+            padding: '2rem',
+          }}
+        >
+          <LoginForm />
+        </Col>
       </Row>
     </div>
-
-    <Link to="/app/">Go to App</Link>
   </Layout>
 )
 
-export default IndexPage
+export default LoginPage
