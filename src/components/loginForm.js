@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { Mutation } from 'react-apollo'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 
 import { LOGIN } from '../apollo/mutations'
 import graphQlErrors from './graphqlErrors'
 import { setAuthenticatedUser, getAuthenticatedUser } from '../apollo/client'
-import { navigate } from '@reach/router'
 
 class NormalLoginForm extends Component {
   handleSubmit = (e, login) => {

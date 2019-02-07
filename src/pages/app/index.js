@@ -1,15 +1,16 @@
 import React from 'react'
 import Dashboard from './dashboard'
-import { Redirect, Router, navigate } from '@reach/router'
+import { navigate } from 'gatsby'
+import { Redirect, Router } from '@reach/router'
 import { getAuthenticatedUser } from '../../apollo/client'
 
 const AppIndex = ({ location, navigate }) => {
   console.log(location)
 
   // Redirect to login page if not logged in
-  if (!getAuthenticatedUser()) {
-    navigate('/login')
-  }
+  // if (!getAuthenticatedUser()) {
+  //   navigate('/login')
+  // }
 
   // Redirect to dashboard if logged in and accessing `/app`
   if (location.pathname === '/app' || location.pathname === '/app/') {

@@ -10,7 +10,7 @@ const defaultState = {
 }
 
 export const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  uri: `${process.env.GATSBY_SERVER_URL}/graphql`,
   fetch,
   clientState: {
     defaults: defaultState,
