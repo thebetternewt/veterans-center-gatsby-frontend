@@ -3,7 +3,8 @@ import { gql } from 'apollo-boost'
 export const AUTH_QUERY = gql`
   query AuthQuery {
     user @client {
-      name
+      firstName
+      lastName
       email
     }
   }

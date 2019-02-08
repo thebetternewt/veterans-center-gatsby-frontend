@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout, Menu, Icon } from 'antd'
-import { logOutUser } from '../../apollo/client'
+import { logOutUser, getAuthenticatedUser } from '../../apollo/client'
 import { navigate } from 'gatsby'
 import PrivateRoute from '../../components/privateRoute'
 const { Header, Content, Footer, Sider } = Layout
@@ -12,6 +12,8 @@ const logoStyles = {
 }
 
 const Dashboard = () => {
+  const user = getAuthenticatedUser()
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -28,18 +30,14 @@ const Dashboard = () => {
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
           <Menu.Item key="1">
             <Icon type="user" />
-            <span className="nav-text">nav 1</span>
+            <span className="nav-text">Profile</span>
           </Menu.Item>
           <Menu.Item key="2">
             <Icon type="video-camera" />
-            <span className="nav-text">nav 2</span>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Icon type="upload" />
-            <span className="nav-text">nav 3</span>
+            <span className="nav-text">Needs</span>
           </Menu.Item>
           <Menu.Item
-            key="4"
+            key="3"
             onClick={async () => {
               await logOutUser()
               navigate('/')
@@ -51,14 +49,26 @@ const Dashboard = () => {
         </Menu>
       </Sider>
       <Layout>
-        <Header style={{ background: '#fff', padding: 0 }} />
-        <Content style={{ margin: '24px 16px 0' }}>
-          <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+        <Header
+          style={{ background: '#fff', padding: '0 1rem', minWidth: 320 }}
+        >
+          <h2>Hello, {user && user.firstName}!</h2>
+        </Header>
+        <Content style={{ margin: '24px 16px 0', minWidth: 288 }}>
+          <div
+            style={{
+              padding: 24,
+              background: '#fff',
+              minHeight: 360,
+            }}
+          >
             content
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©2018 Created by Ant UED
+          Veterans Center © {new Date().getFullYear()}
+          <br />
+          Created by BIS 8753
         </Footer>
       </Layout>
     </Layout>

@@ -37,8 +37,8 @@ module.exports = {
       options: {
         javascriptEnabled: true,
         modifyVars: {
-          'primary-color': '#660000',
-          'layout-header-background': '#333',
+          'primary-color': '#03243a',
+          'layout-header-background': '#0c5686',
         },
       },
     },
