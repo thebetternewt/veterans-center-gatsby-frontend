@@ -5,6 +5,7 @@ import { Redirect, Router } from '@reach/router'
 import { getAuthenticatedUser } from '../../apollo/client'
 
 import PrivateRoute from '../../components/privateRoute'
+import VolunteerProfileForm from '../../components/VolunteerProfileForm'
 
 const AppIndex = ({ location, navigate }) => {
   console.log(location)
@@ -15,15 +16,17 @@ const AppIndex = ({ location, navigate }) => {
   // }
 
   // Redirect to dashboard if logged in and accessing `/app`
-  if (location.pathname === '/app' || location.pathname === '/app/') {
-    console.log('app')
-    return <Redirect to="/app/dashboard" noThrow />
-  }
+  // if (location.pathname === '/app' || location.pathname === '/app/') {
+  //   console.log('app')
+  //   return <Redirect to="/app/dashboard" noThrow />
+  // }
 
   return (
-    <Router>
-      <Dashboard path="app/dashboard" />
-    </Router>
+    <Dashboard>
+      <Router>
+        <VolunteerProfileForm path="app/volunteer-signup" />
+      </Router>
+    </Dashboard>
   )
 }
 
