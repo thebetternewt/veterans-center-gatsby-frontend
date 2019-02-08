@@ -14,6 +14,7 @@ import {
 import { Mutation } from 'react-apollo'
 import { SIGNUP } from '../apollo/mutations'
 import graphQlErrors from './graphqlErrors'
+import { navigate } from 'gatsby'
 
 function hasErrors(fieldsError) {
   const errors = {
@@ -63,6 +64,7 @@ class SignupForm extends Component {
         }
         try {
           await signup({ variables: flattenedValues })
+          navigate('/login')
         } catch (err) {
           console.log(err)
         }
