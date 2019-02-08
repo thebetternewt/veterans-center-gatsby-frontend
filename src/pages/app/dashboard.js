@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout, Menu, Icon } from 'antd'
 import { logOutUser, getAuthenticatedUser } from '../../apollo/client'
-import { navigate } from 'gatsby'
+import { navigate, Link } from 'gatsby'
 const { Header, Content, Footer, Sider } = Layout
 
 const logoStyles = {
@@ -10,7 +10,19 @@ const logoStyles = {
   margin: 16,
 }
 
-const Dashboard = () => {
+const defaultContent = (
+  <div
+    style={{
+      padding: 24,
+      background: '#fff',
+      minHeight: 360,
+    }}
+  >
+    content
+  </div>
+)
+
+const Dashboard = ({ children = defaultContent }) => {
   const user = getAuthenticatedUser()
 
   return (
@@ -28,13 +40,18 @@ const Dashboard = () => {
         <div className="logo" style={logoStyles} />
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
           <Menu.Item key="1">
-            <Icon type="user" />
-            <span className="nav-text">Profile</span>
+            <Link to="/app/volunteer-signup">
+              <Icon type="user" />
+              <span className="nav-text">Profile</span>
+            </Link>
           </Menu.Item>
           <Menu.Item key="2">
-            <Icon type="video-camera" />
-            <span className="nav-text">Needs</span>
+            <Link to="/app">
+              <Icon type="video-camera" />
+              <span className="nav-text">Needs</span>
+            </Link>
           </Menu.Item>
+
           <Menu.Item
             key="3"
             onClick={async () => {
@@ -54,15 +71,7 @@ const Dashboard = () => {
           <h2>Hello, {user && user.firstName}!</h2>
         </Header>
         <Content style={{ margin: '24px 16px 0', minWidth: 288 }}>
-          <div
-            style={{
-              padding: 24,
-              background: '#fff',
-              minHeight: 360,
-            }}
-          >
-            content
-          </div>
+          {children}
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Veterans Center © {new Date().getFullYear()}
