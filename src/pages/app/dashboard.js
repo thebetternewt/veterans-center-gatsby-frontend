@@ -2,7 +2,6 @@ import React from 'react'
 import { Layout, Menu, Icon } from 'antd'
 import { logOutUser, getAuthenticatedUser } from '../../apollo/client'
 import { navigate } from 'gatsby'
-import PrivateRoute from '../../components/privateRoute'
 const { Header, Content, Footer, Sider } = Layout
 
 const logoStyles = {
@@ -75,4 +74,4 @@ const Dashboard = () => {
   )
 }
 
-export default props => <PrivateRoute component={Dashboard} {...props} />
+export default Dashboard

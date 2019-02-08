@@ -82,6 +82,7 @@ class SignupForm extends Component {
       getFieldsValue,
       validateFields,
     } = this.props.form
+
     const firstNameError =
       isFieldTouched('firstName') && getFieldError('firstName')
     const lastNameError =

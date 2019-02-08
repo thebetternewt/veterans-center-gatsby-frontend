@@ -4,6 +4,8 @@ import { navigate } from 'gatsby'
 import { Redirect, Router } from '@reach/router'
 import { getAuthenticatedUser } from '../../apollo/client'
 
+import PrivateRoute from '../../components/privateRoute'
+
 const AppIndex = ({ location, navigate }) => {
   console.log(location)
 
@@ -25,4 +27,4 @@ const AppIndex = ({ location, navigate }) => {
   )
 }
 
-export default AppIndex
+export default props => <PrivateRoute component={AppIndex} {...props} />
