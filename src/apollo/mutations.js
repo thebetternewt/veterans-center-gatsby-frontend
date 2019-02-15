@@ -51,3 +51,24 @@ export const LOGIN = gql`
     login(email: $email, password: $password)
   }
 `
+
+export const CREATE_RECIPIENT_PROFILE = gql`
+  mutation CreateRecipientProfile(
+    $allowPhoneContact: Boolean
+    $allowEmailContact: Boolean
+    $lat: Float!
+    $lng: Float!
+  ) {
+    createRecipientProfile(
+      allowPhoneContact: $allowPhoneContact
+      allowEmailContact: $allowEmailContact
+      lat: $lat
+      lng: $lng
+    ) {
+      id
+      allowPhoneContact
+      allowEmailContact
+      location
+    }
+  }
+`
