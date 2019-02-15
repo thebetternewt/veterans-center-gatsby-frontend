@@ -32,15 +32,6 @@ const statesWithAbbreviations = new UsaStates().format({
 })
 
 class SignupForm extends Component {
-  state = {
-    confirmDirty: false,
-  }
-
-  handleConfirmBlur = e => {
-    const value = e.target.value
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value })
-  }
-
   compareToFirstPassword = (rule, value, callback) => {
     const { form } = this.props
     if (value && value !== form.getFieldValue('password')) {
@@ -236,7 +227,7 @@ class SignupForm extends Component {
                     validator: this.compareToFirstPassword,
                   },
                 ],
-              })(<Input.Password onBlur={this.handleConfirmBlur} />)}
+              })(<Input.Password />)}
             </Form.Item>
 
             <Form.Item {...tailFormItemLayout}>
