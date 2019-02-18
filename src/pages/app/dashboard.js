@@ -46,9 +46,9 @@ const Dashboard = ({ children = defaultContent }) => {
             </Link>
           </Menu.Item>
           <Menu.Item key="2">
-            <Link to="/app">
+            <Link to="/app/recipient-signup">
               <Icon type="video-camera" />
-              <span className="nav-text">Needs</span>
+              <span className="nav-text">Recipient Profile</span>
             </Link>
           </Menu.Item>
 

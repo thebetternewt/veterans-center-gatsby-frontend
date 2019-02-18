@@ -5,12 +5,10 @@ import { Row, Col } from 'antd'
 import family from '../images/family.jpeg'
 
 import Layout from '../components/layout'
-import SEO from '../components/seo'
 import HomeSignup from '../components/homeSignup'
 
 const IndexPage = () => (
   <Layout>
-    <SEO title="Home" keywords={[`veterans`, `military`, `volunteer`]} />
     <div
       style={{
         width: '100vw',
